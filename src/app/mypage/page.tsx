@@ -1,4 +1,14 @@
+'use client';
+
+import { useEffect } from 'react';
+import { useUserStore } from '../store/UserStore';
+
 export default function Page() {
+	const user = useUserStore((state) => state.user);
+
+	useEffect(() => {
+		console.log('user >>>', user);
+	}, [user]);
 	return (
 		<div>
 			<div className="rounded-lg border bg-white p-6">
