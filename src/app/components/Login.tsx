@@ -1,33 +1,40 @@
 'use client';
 
+import { baseApi } from '../lib/baseApi';
 import { useUserStore } from '../store/UserStore';
 
 export default function Login() {
 	const setUser = useUserStore((state) => state.setUser);
+	const setAccessTonken = useUserStore((state) => state.setAccessToken);
 
 	const goLogin = async () => {
-		//1. API POST 로그인 호출
-		const res = await fetch('http://localhost:33000/api/v1/employees/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				email: 'hajin@naver.com',
-				password: '1234',
-			}),
+		const res = await baseApi.post('/employees/login', {
+			email: 'hajin@naver.com',
+			password: '1234',
 		});
-		//2. 응답값 받아서 zustand에 저장
-		console.log('res >>', res);
+		console.log('res >>>', res.data.data);
+		setAccessTonken(res.data.data.accessToken);
 
-		const json = await res.json();
-		console.log('json >>', json);
-
-		setUser({
-			accessToken: json?.data?.accessToken || '',
-			email: 'seongmin',
-			departmentName: '',
-		});
+		// //1. API POST 로그인 호출
+		// const res = await fetch('http://localhost:33000/api/v1/employees/login', {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		'Content-Type': 'application/json',
+		// 	},
+		// 	body: JSON.stringify({
+		// 		email: 'hajin@naver.com',
+		// 		password: '1234',
+		// 	}),
+		// });
+		// //2. 응답값 받아서 zustand에 저장
+		// console.log('res >>', res);
+		// const json = await res.json();
+		// console.log('json >>', json);
+		// setUser({
+		// 	accessToken: json?.data?.accessToken || '',
+		// 	email: 'seongmin',
+		// 	departmentName: '',
+		// });
 	};
 
 	return (
